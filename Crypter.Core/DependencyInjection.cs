@@ -62,6 +62,7 @@ public static class DependencyInjection
 
         services.TryAddSingleton<IPasswordHashService, PasswordHashService>();
         services.TryAddSingleton<ICryptoProvider, DefaultCryptoProvider>();
+        services.TryAddSingleton<IVersionService, VersionService>();
 
         services.TryAddScoped<IHangfireBackgroundService, HangfireBackgroundService>();
         services.TryAddScoped<IUserEmailVerificationService, UserEmailVerificationService>();
