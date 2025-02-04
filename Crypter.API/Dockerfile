@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG GIT_VERSION_TAG=0.0.0
 WORKDIR /source/
 
 RUN dotnet tool install --global dotnet-ef --version 9.0.*
@@ -21,7 +22,7 @@ COPY Crypter.Crypto.Common/. ./Crypter.Crypto.Common/
 COPY Crypter.Crypto.Providers.Default/. ./Crypter.Crypto.Providers.Default/
 COPY Crypter.DataAccess/. ./Crypter.DataAccess/
 
-RUN dotnet publish Crypter.API --configuration release --no-self-contained /p:TreatWarningsAsErrors=true /warnaserror --output /app/
+RUN dotnet publish Crypter.API --configuration release --no-self-contained /p:TreatWarningsAsErrors=true /warnaserror --output /app/ /p:FileVersion=$GIT_VERSION_TAG /p:Version=$GIT_VERSION_TAG
 RUN dotnet-ef migrations bundle --project Crypter.DataAccess --startup-project Crypter.API --configuration release --no-build --target-runtime linux-x64 --output /app/efbundle --verbose
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
