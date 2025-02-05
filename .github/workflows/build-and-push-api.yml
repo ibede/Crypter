@@ -68,3 +68,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GIT_VERSION_TAG=${{ steps.version-match.outputs.match != '' && steps.version-match.outputs.group1 || '0.0.0' }}
+            VCS_URL={{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.url'] }}

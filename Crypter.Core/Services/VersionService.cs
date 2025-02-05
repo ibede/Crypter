@@ -44,20 +44,8 @@ namespace Crypter.Core.Services
         public VersionService()
         {
             FileVersionInfo versionInfo = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
-            if (versionInfo.ProductVersion != null)
-            {
-                // product version looks like "{version}+{git_commit_hash}"
-                string[] versionParts = versionInfo.ProductVersion.Split('+');
-                VersionHash = versionParts.Length > 1 ? versionParts[^1] : Maybe<string>.None;
-            }
-
-            FileVersion = versionInfo.FileVersion switch
-            {
-                null => "1.0.0-devlocal",
-                "1.0.0.0" => "1.0.0-devlocal", // 1.0.0.0 is the default
-                "0.0.0" => "0.0.0-docker", //hash should be used
-                _ => versionInfo.FileVersion
-            };
+            VersionHash = versionInfo.GetVersionHash();
+            FileVersion = versionInfo.FileVersion ?? "1.0.0.0";
         }
     }
 }

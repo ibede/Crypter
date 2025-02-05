@@ -26,6 +26,9 @@ RUN dotnet publish Crypter.API --configuration release --no-self-contained /p:Tr
 RUN dotnet-ef migrations bundle --project Crypter.DataAccess --startup-project Crypter.API --configuration release --no-build --target-runtime linux-x64 --output /app/efbundle --verbose
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+ARG VCS_URL
+ENV VCS_URL=$VCS_URL
 WORKDIR /app
+
 COPY --from=build /app ./
 CMD ["dotnet", "Crypter.API.dll"]

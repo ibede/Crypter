@@ -24,6 +24,7 @@
  * Contact the current copyright holder to discuss commercial license options.
  */
 
+using EasyMonads;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -35,6 +36,20 @@ namespace Crypter.Common.Infrastructure
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
             return FileVersionInfo.GetVersionInfo(asm.Location);
+        }
+    }
+
+    public static class FileVersionInfoExtension
+    {
+        public static Maybe<string> GetVersionHash(this FileVersionInfo self)
+        {
+            if (self.ProductVersion != null)
+            {
+                // product version looks like "{version}+{git_commit_hash}"
+                string[] versionParts = self.ProductVersion.Split('+');
+                return versionParts.Length > 1 ? versionParts[^1] : Maybe<string>.None;
+            }
+            return Maybe<string>.None;
         }
     }
 }

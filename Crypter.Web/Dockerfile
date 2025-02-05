@@ -29,6 +29,9 @@ RUN dotnet workload install wasm-tools
 RUN dotnet publish Crypter.Web --no-restore --configuration release /p:TreatWarningsAsErrors=true /warnaserror --output /app/ /p:FileVersion=$GIT_VERSION_TAG /p:Version=$GIT_VERSION_TAG
 
 FROM caddy:2.9-alpine AS webhost
+ARG VCS_URL
+ENV VCS_URL=$VCS_URL
+
 COPY Crypter.Web/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/wwwroot/ /srv/
 EXPOSE 80
