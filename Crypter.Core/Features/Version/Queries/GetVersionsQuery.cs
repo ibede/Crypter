@@ -29,13 +29,12 @@ using EasyMonads;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemVersion = System.Version;
 
 namespace Crypter.Core.Features.Version.Queries
 {
     public record GetVersionsQuery : IRequest<GetVersionsResult>;
 
-    public record GetVersionsResult(string FileVersion, string VersionHash);
+    public record GetVersionsResult(string FileVersion, Maybe<string> VersionHash);
 
     internal sealed class GetVersionQueryHandler : IRequestHandler<GetVersionsQuery, GetVersionsResult>
     {
@@ -48,15 +47,7 @@ namespace Crypter.Core.Features.Version.Queries
 
         public Task<GetVersionsResult> Handle(GetVersionsQuery request, CancellationToken cancellationToken)
         {
-            // product version look like "{version}+{git_hash}"
-            string[] versionParts = _versionService.ProductVersion.SomeOrDefault(string.Empty).Split('+');
-            string hash = versionParts[^1];
-
-            if (SystemVersion.TryParse(_versionService.FileVersion.SomeOrDefault(), out SystemVersion? version) && version != null)
-            {
-                return new GetVersionsResult(version.ToString(), hash).AsTask();
-            }
-            return new GetVersionsResult(hash, hash).AsTask();
+            return new GetVersionsResult(_versionService.FileVersion, _versionService.VersionHash).AsTask();
         }
     }
 
