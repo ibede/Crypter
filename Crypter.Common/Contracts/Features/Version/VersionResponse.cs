@@ -33,13 +33,15 @@ namespace Crypter.Common.Contracts.Features.Version
         public string ProductVersion { get; set; }
         public string? VersionHash { get; set; }
         public string VersionSystemUrl { get; set; }
+        public bool IsRelease { get; set; }
 
         [JsonConstructor]
-        public VersionResponse(string productVersion, string? versionHash, string versionSystemUrl)
+        public VersionResponse(string productVersion, string? versionHash, string versionSystemUrl, bool isRelease)
         {
             ProductVersion = productVersion;
             VersionHash = versionHash;
             VersionSystemUrl = versionSystemUrl;
+            IsRelease = isRelease;
         }
     }
 }

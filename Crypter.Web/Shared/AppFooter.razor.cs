@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (C) 2024 Crypter File Transfer
+ * Copyright (C) 2025 Crypter File Transfer
  *
  * This file is part of the Crypter file transfer project.
  *
@@ -50,9 +50,9 @@ namespace Crypter.Web.Shared
         protected override async Task OnInitializedAsync()
         {
             Maybe<VersionResponse> response = await CrypterApiService.ApiVersion.GetApiVersionAsync();
-            _apiVersion = response.Match("1.0.0.0", x => x.ProductVersion);
+            _apiVersion = response.Match("1.0.0", x => x.IsRelease ? x.ProductVersion : $"#{x.VersionHash?[..7] ?? "???"}");
             _apiVersionUrl = response.Match(string.Empty, x => x.VersionSystemUrl);
-            _clientVersion = VersionService.ProductVersion;
+            _clientVersion = VersionService.IsRelease ? VersionService.ProductVersion : $"#{VersionService.VersionHash?[..7] ?? "???"}";
             _clientVersionUrl = VersionService.VersionUrl;
         }
 

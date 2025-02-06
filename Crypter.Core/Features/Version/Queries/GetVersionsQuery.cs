@@ -34,7 +34,7 @@ namespace Crypter.Core.Features.Version.Queries
 {
     public record GetVersionsQuery : IRequest<GetVersionsResult>;
 
-    public record GetVersionsResult(string Version, string? VersionHash, string versionUrl);
+    public record GetVersionsResult(string Version, string? VersionHash, string VersionUrl, bool IsRelease);
 
     internal sealed class GetVersionQueryHandler : IRequestHandler<GetVersionsQuery, GetVersionsResult>
     {
@@ -47,7 +47,11 @@ namespace Crypter.Core.Features.Version.Queries
 
         public Task<GetVersionsResult> Handle(GetVersionsQuery request, CancellationToken cancellationToken)
         {
-            return new GetVersionsResult(_versionService.ProductVersion, _versionService.VersionHash, _versionService.VersionUrl).AsTask();
+            return new GetVersionsResult(
+                _versionService.ProductVersion,
+                _versionService.VersionHash,
+                _versionService.VersionUrl,
+                _versionService.IsRelease).AsTask();
         }
     }
 

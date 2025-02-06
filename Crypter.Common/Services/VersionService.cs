@@ -25,7 +25,6 @@
  */
 
 using Crypter.Common.Infrastructure;
-using System.Diagnostics;
 
 namespace Crypter.Common.Services
 {
@@ -34,6 +33,7 @@ namespace Crypter.Common.Services
         public string ProductVersion { get; }
         public string? VersionHash { get; }
         public string VersionUrl { get; }
+        public bool IsRelease { get; }
     }
 
     public class VersionService : IVersionService
@@ -41,19 +41,19 @@ namespace Crypter.Common.Services
         public string ProductVersion { get; }
         public string? VersionHash { get; }
         public string VersionUrl { get; }
+        public bool IsRelease { get; }
 
-        private const string DEFAULT_VERSION = "1.0.0.0";
+        private const string DEFAULT_VERSION = "1.0.0";
         private const string DEFAULT_BUILDER_VERSION = "0.0.0";
 
         public VersionService()
         {
-            var productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
+            ProductVersion? productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
 
             VersionHash = productVersion?.Hash;
             ProductVersion = productVersion?.Version ?? DEFAULT_VERSION;
-
-            bool isRelease = ProductVersion != DEFAULT_VERSION && ProductVersion != DEFAULT_BUILDER_VERSION;
-            VersionUrl = VersionUrlProvider.GetVersionUrl(isRelease, VersionHash, ProductVersion);
+            IsRelease = ProductVersion != DEFAULT_VERSION && ProductVersion != DEFAULT_BUILDER_VERSION;
+            VersionUrl = VersionUrlProvider.GetVersionUrl(IsRelease, VersionHash, ProductVersion);
         }
     }
 }
