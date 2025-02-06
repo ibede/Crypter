@@ -26,6 +26,7 @@
 
 using Crypter.Common.Client.Interfaces.HttpClients;
 using Crypter.Common.Contracts.Features.Version;
+using Crypter.Common.Services;
 using EasyMonads;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -39,13 +40,20 @@ namespace Crypter.Web.Shared
 
         [Inject] private ICrypterApiClient CrypterApiService { get; init; } = null!;
 
-        private string _version = "";
-        private string _url = "";
+        [Inject] private IVersionService VersionService { get; set; } = null!;
+
+        private string _apiVersion = string.Empty;
+        private string _apiVersionUrl = string.Empty;
+        private string _clientVersion = string.Empty;
+        private string _clientVersionUrl = string.Empty;
+
         protected override async Task OnInitializedAsync()
         {
             Maybe<VersionResponse> response = await CrypterApiService.ApiVersion.GetApiVersionAsync();
-            _version = response.Match("1.0.0.1", x => x.FileVersion);
-
+            _apiVersion = response.Match("1.0.0.0", x => x.ProductVersion);
+            _apiVersionUrl = response.Match(string.Empty, x => x.VersionSystemUrl);
+            _clientVersion = VersionService.ProductVersion;
+            _clientVersionUrl = VersionService.VersionUrl;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
