@@ -26,6 +26,7 @@
 
 using System.Threading.Tasks;
 using Crypter.Common.Exceptions;
+using Crypter.Common.Services;
 using Crypter.Core.Identity;
 using Crypter.Core.Repositories;
 using Crypter.Core.Services;

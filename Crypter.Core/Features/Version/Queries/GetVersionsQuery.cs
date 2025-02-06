@@ -24,7 +24,7 @@
  * Contact the current copyright holder to discuss commercial license options.
  */
 
-using Crypter.Core.Services;
+using Crypter.Common.Services;
 using EasyMonads;
 using MediatR;
 using System.Threading;
@@ -34,7 +34,7 @@ namespace Crypter.Core.Features.Version.Queries
 {
     public record GetVersionsQuery : IRequest<GetVersionsResult>;
 
-    public record GetVersionsResult(string FileVersion, Maybe<string> VersionHash);
+    public record GetVersionsResult(string Version, string? VersionHash, string versionUrl);
 
     internal sealed class GetVersionQueryHandler : IRequestHandler<GetVersionsQuery, GetVersionsResult>
     {
@@ -47,7 +47,7 @@ namespace Crypter.Core.Features.Version.Queries
 
         public Task<GetVersionsResult> Handle(GetVersionsQuery request, CancellationToken cancellationToken)
         {
-            return new GetVersionsResult(_versionService.FileVersion, _versionService.VersionHash).AsTask();
+            return new GetVersionsResult(_versionService.ProductVersion, _versionService.VersionHash, _versionService.VersionUrl).AsTask();
         }
     }
 

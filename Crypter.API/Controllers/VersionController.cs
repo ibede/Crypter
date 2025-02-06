@@ -52,7 +52,7 @@ namespace Crypter.API.Controllers
         {
             GetVersionsQuery request = new GetVersionsQuery();
             GetVersionsResult result = await _sender.Send(request, cancellationToken);
-            VersionResponse response = new VersionResponse(result.FileVersion, result.VersionHash.SomeOrDefault());
+            VersionResponse response = new VersionResponse(result.Version, result.VersionHash, result.versionUrl);
             return Ok(response);
         }
     }

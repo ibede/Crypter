@@ -25,27 +25,35 @@
  */
 
 using Crypter.Common.Infrastructure;
-using EasyMonads;
 using System.Diagnostics;
 
-namespace Crypter.Core.Services
+namespace Crypter.Common.Services
 {
     public interface IVersionService
     {
-        public string FileVersion { get; }
-        public Maybe<string> VersionHash { get; }
+        public string ProductVersion { get; }
+        public string? VersionHash { get; }
+        public string VersionUrl { get; }
     }
 
     public class VersionService : IVersionService
     {
-        public string FileVersion { get; }
-        public Maybe<string> VersionHash { get; }
+        public string ProductVersion { get; }
+        public string? VersionHash { get; }
+        public string VersionUrl { get; }
+
+        private const string DEFAULT_VERSION = "1.0.0.0";
+        private const string DEFAULT_BUILDER_VERSION = "0.0.0";
 
         public VersionService()
         {
-            FileVersionInfo versionInfo = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
-            VersionHash = versionInfo.GetVersionHash();
-            FileVersion = versionInfo.FileVersion ?? "1.0.0.0";
+            var productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
+
+            VersionHash = productVersion?.Hash;
+            ProductVersion = productVersion?.Version ?? DEFAULT_VERSION;
+
+            bool isRelease = ProductVersion != DEFAULT_VERSION && ProductVersion != DEFAULT_BUILDER_VERSION;
+            VersionUrl = VersionUrlProvider.GetVersionUrl(isRelease, VersionHash, ProductVersion);
         }
     }
 }
