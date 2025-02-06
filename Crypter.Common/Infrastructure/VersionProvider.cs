@@ -39,7 +39,7 @@ namespace Crypter.Common.Infrastructure
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
             AssemblyInformationalVersionAttribute? versionInfo = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            var productVersion = versionInfo?.InformationalVersion;
+            string? productVersion = versionInfo?.InformationalVersion;
             if (productVersion != null)
             {
                 string[] versionParts = productVersion.Split(HASH_SEPARATOR);
