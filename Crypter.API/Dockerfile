@@ -1,6 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG GIT_VERSION_TAG=0.0.0
 ARG GIT_VERSION_TAG_FULL=0.0.0
+ARG VCS_URL
+ENV VCS_URL=$VCS_URL
 WORKDIR /source/
 
 RUN dotnet tool install --global dotnet-ef --version 9.0.*
@@ -28,9 +30,6 @@ RUN dotnet publish Crypter.API --configuration release --no-self-contained /p:Tr
 RUN dotnet-ef migrations bundle --project Crypter.DataAccess --startup-project Crypter.API --configuration release --no-build --target-runtime linux-x64 --output /app/efbundle --verbose
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
-ARG VCS_URL
-ENV VCS_URL=$VCS_URL
 WORKDIR /app
-
 COPY --from=build /app ./
 CMD ["dotnet", "Crypter.API.dll"]

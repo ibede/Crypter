@@ -24,37 +24,17 @@
  * Contact the current copyright holder to discuss commercial license options.
  */
 
-using Crypter.Common.Infrastructure;
-using Microsoft.Extensions.Logging;
+using System;
 
-namespace Crypter.Common.Services
+namespace Crypter.Common.Attributes
 {
-    public interface IVersionService
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public class VersionControlMetadataAttribute :Attribute
     {
-        public string ProductVersion { get; }
-        public string? VersionHash { get; }
-        public string VersionUrl { get; }
-        public bool IsRelease { get; }
-    }
-
-    public class VersionService : IVersionService
-    {
-        public string ProductVersion { get; }
-        public string? VersionHash { get; }
-        public string VersionUrl { get; }
-        public bool IsRelease { get; }
-
-        private const string DEFAULT_VERSION = "1.0.0";
-        private const string DEFAULT_BUILDER_VERSION = "0.0.0";
-
-        public VersionService(ILogger<VersionService> logger)
+        public string BaseUrl { get; }
+        public VersionControlMetadataAttribute(string value)
         {
-            ProductVersion? productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo(logger);
-
-            VersionHash = productVersion?.Hash;
-            ProductVersion = productVersion?.Version ?? DEFAULT_VERSION;
-            IsRelease = ProductVersion != DEFAULT_VERSION && ProductVersion != DEFAULT_BUILDER_VERSION;
-            VersionUrl = VersionUrlProvider.GetVersionUrl(IsRelease, VersionHash, ProductVersion, logger);
+            BaseUrl = value;
         }
     }
 }

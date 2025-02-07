@@ -24,9 +24,9 @@
  * Contact the current copyright holder to discuss commercial license options.
  */
 
+using Crypter.Common.Attributes;
 using Crypter.Common.Services;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Reflection;
 
 namespace Crypter.Common.Infrastructure
@@ -59,16 +59,22 @@ namespace Crypter.Common.Infrastructure
     {
         private const string RELEASE_PATH = "releases/tag";
         private const string COMMIT_PATH = "commit";
-        private const string VCS_URL_ENV = "VCS_URL";
 
-        public static string GetVersionUrl(bool isRelease, string? hash, string productVersion)
+        public static string GetVersionUrl(bool isRelease, string? hash, string productVersion, ILogger<VersionService> logger)
         {
-            string? versionUrlBase = Environment.GetEnvironmentVariable(VCS_URL_ENV)?.TrimEnd('/');
+            Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+            VersionControlMetadataAttribute? metaData = asm.GetCustomAttribute<VersionControlMetadataAttribute>();
+            string? versionUrlBase = metaData?.BaseUrl;
+            
             if (versionUrlBase != null)
             {
+                logger.LogInformation("*******Assembly version url " + versionUrlBase);
                 string versionPath = isRelease ? RELEASE_PATH : COMMIT_PATH;
                 string version = isRelease ? productVersion : (hash ?? string.Empty);
                 return $"{versionUrlBase}/{(versionPath)}/{version}" ?? string.Empty;
+            } else
+            {
+                logger.LogInformation("*******Assembly version url not provided");
             }
             return string.Empty;
         }
