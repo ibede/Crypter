@@ -22,6 +22,7 @@ COPY Crypter.Core/. ./Crypter.Core/
 COPY Crypter.Crypto.Common/. ./Crypter.Crypto.Common/
 COPY Crypter.Crypto.Providers.Default/. ./Crypter.Crypto.Providers.Default/
 COPY Crypter.DataAccess/. ./Crypter.DataAccess/
+COPY .git/. ./.git/
 
 RUN dotnet publish Crypter.API --configuration release --no-self-contained /p:TreatWarningsAsErrors=true /warnaserror --output /app/ /p:Version=$GIT_VERSION_TAG /p:InformationalVersion=$GIT_VERSION_TAG_FULL
 RUN dotnet-ef migrations bundle --project Crypter.DataAccess --startup-project Crypter.API --configuration release --no-build --target-runtime linux-x64 --output /app/efbundle --verbose

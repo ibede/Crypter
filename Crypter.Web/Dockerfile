@@ -25,6 +25,7 @@ COPY Crypter.Common.Client/. ./Crypter.Common.Client/
 COPY Crypter.Crypto.Common/. ./Crypter.Crypto.Common/
 COPY Crypter.Crypto.Providers.Browser/. ./Crypter.Crypto.Providers.Browser/
 COPY Crypter.Web/. ./Crypter.Web/
+COPY .git/. ./.git/
 
 RUN dotnet workload install wasm-tools
 RUN dotnet publish Crypter.Web --no-restore --configuration release /p:TreatWarningsAsErrors=true /warnaserror --output /app/ /p:Version=$GIT_VERSION_TAG /p:InformationalVersion=$GIT_VERSION_TAG_FULL
