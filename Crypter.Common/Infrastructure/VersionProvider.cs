@@ -40,12 +40,12 @@ namespace Crypter.Common.Infrastructure
         public static ProductVersion? GetEntryAssemblyVersionInfo(ILogger<VersionService> logger)
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-            logger.LogDebug("*******Assembly loaded " + asm.FullName);
+            logger.LogInformation("*******Assembly loaded " + asm.FullName);
             AssemblyInformationalVersionAttribute? versionInfo = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             string? productVersion = versionInfo?.InformationalVersion;
             if (productVersion != null)
             {
-                logger.LogDebug("*******Assembly version " + productVersion);
+                logger.LogInformation("*******Assembly version " + productVersion);
                 string[] versionParts = productVersion.Split(HASH_SEPARATOR);
                 return versionParts.Length > 1 ?
                     new ProductVersion(versionParts[0], versionParts[1]) :
