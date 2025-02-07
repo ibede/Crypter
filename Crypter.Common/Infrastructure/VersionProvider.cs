@@ -25,8 +25,6 @@
  */
 
 using Crypter.Common.Attributes;
-using Crypter.Common.Services;
-using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Crypter.Common.Infrastructure
@@ -37,15 +35,13 @@ namespace Crypter.Common.Infrastructure
     {
         private const char HASH_SEPARATOR = '+';
 
-        public static ProductVersion? GetEntryAssemblyVersionInfo(ILogger<VersionService> logger)
+        public static ProductVersion? GetEntryAssemblyVersionInfo()
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-            logger.LogInformation("*******Assembly loaded " + asm.FullName);
             AssemblyInformationalVersionAttribute? versionInfo = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             string? productVersion = versionInfo?.InformationalVersion;
             if (productVersion != null)
             {
-                logger.LogInformation("*******Assembly version " + productVersion);
                 string[] versionParts = productVersion.Split(HASH_SEPARATOR);
                 return versionParts.Length > 1 ?
                     new ProductVersion(versionParts[0], versionParts[1]) :
@@ -60,7 +56,7 @@ namespace Crypter.Common.Infrastructure
         private const string RELEASE_PATH = "releases/tag";
         private const string COMMIT_PATH = "commit";
 
-        public static string GetVersionUrl(bool isRelease, string? hash, string productVersion, ILogger<VersionService> logger)
+        public static string GetVersionUrl(bool isRelease, string? hash, string productVersion)
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
             VersionControlMetadataAttribute? metaData = asm.GetCustomAttribute<VersionControlMetadataAttribute>();
@@ -68,13 +64,9 @@ namespace Crypter.Common.Infrastructure
             
             if (versionUrlBase != null)
             {
-                logger.LogInformation("*******Assembly version url " + versionUrlBase);
                 string versionPath = isRelease ? RELEASE_PATH : COMMIT_PATH;
                 string version = isRelease ? productVersion : (hash ?? string.Empty);
                 return $"{versionUrlBase}/{(versionPath)}/{version}" ?? string.Empty;
-            } else
-            {
-                logger.LogInformation("*******Assembly version url not provided");
             }
             return string.Empty;
         }

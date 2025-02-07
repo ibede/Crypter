@@ -32,6 +32,7 @@ namespace Crypter.Common.Attributes
     public class VersionControlMetadataAttribute :Attribute
     {
         public string BaseUrl { get; }
+        
         public VersionControlMetadataAttribute(string value)
         {
             BaseUrl = value;

@@ -25,7 +25,6 @@
  */
 
 using Crypter.Common.Infrastructure;
-using Microsoft.Extensions.Logging;
 
 namespace Crypter.Common.Services
 {
@@ -47,14 +46,14 @@ namespace Crypter.Common.Services
         private const string DEFAULT_VERSION = "1.0.0";
         private const string DEFAULT_BUILDER_VERSION = "0.0.0";
 
-        public VersionService(ILogger<VersionService> logger)
+        public VersionService()
         {
-            ProductVersion? productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo(logger);
+            ProductVersion? productVersion = AssemblyVersionProvider.GetEntryAssemblyVersionInfo();
 
             VersionHash = productVersion?.Hash;
             ProductVersion = productVersion?.Version ?? DEFAULT_VERSION;
             IsRelease = ProductVersion != DEFAULT_VERSION && ProductVersion != DEFAULT_BUILDER_VERSION;
-            VersionUrl = VersionUrlProvider.GetVersionUrl(IsRelease, VersionHash, ProductVersion, logger);
+            VersionUrl = VersionUrlProvider.GetVersionUrl(IsRelease, VersionHash, ProductVersion);
         }
     }
 }
