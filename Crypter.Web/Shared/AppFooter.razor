@@ -82,8 +82,26 @@
     </div>
     <div class="popover-content">
         <div id="version-content" class="version-popover-body">
-            <div>API: <a class="text-decoration-none" href="@_apiVersionUrl" target="_blank">@_apiVersion</a></div>
-            <div>Client: <a class="text-decoration-none" href="@_clientVersionUrl" target="_blank">@_clientVersion</a></div>
+            <div>API: 
+                @if (!string.IsNullOrWhiteSpace(_apiVersionUrl))
+                {
+                    <i class="bi-link-45deg" /> <a class="text-decoration-none" href="@_apiVersionUrl" target="_blank"> @_apiVersion</a>
+                }
+                else
+                {
+                    @_apiVersion
+                }
+            </div>
+            <div>Client:
+                @if (!string.IsNullOrWhiteSpace(_clientVersionUrl))
+                {
+                    <i class="bi-link-45deg" /> <a class="text-decoration-none" href="@_clientVersionUrl" target="_blank"> @_clientVersion</a>
+                }
+                else
+                {
+                    @_clientVersion
+                }
+            </div>
         </div>
     </div>
 </footer>
