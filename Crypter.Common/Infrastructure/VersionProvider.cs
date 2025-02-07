@@ -24,6 +24,8 @@
  * Contact the current copyright holder to discuss commercial license options.
  */
 
+using Crypter.Common.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
 
@@ -35,13 +37,15 @@ namespace Crypter.Common.Infrastructure
     {
         private const char HASH_SEPARATOR = '+';
 
-        public static ProductVersion? GetEntryAssemblyVersionInfo()
+        public static ProductVersion? GetEntryAssemblyVersionInfo(ILogger<VersionService> logger)
         {
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+            logger.LogDebug("*******Assembly loaded " + asm.FullName);
             AssemblyInformationalVersionAttribute? versionInfo = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             string? productVersion = versionInfo?.InformationalVersion;
             if (productVersion != null)
             {
+                logger.LogDebug("*******Assembly version " + productVersion);
                 string[] versionParts = productVersion.Split(HASH_SEPARATOR);
                 return versionParts.Length > 1 ?
                     new ProductVersion(versionParts[0], versionParts[1]) :
