@@ -61,11 +61,12 @@ namespace Crypter.Common.Infrastructure
             Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
             VersionControlMetadataAttribute? metaData = asm.GetCustomAttribute<VersionControlMetadataAttribute>();
             string? versionUrlBase = metaData?.BaseUrl;
+            string prefix = metaData?.MinVerTagPrefix ?? string.Empty;
             
             if (versionUrlBase != null)
             {
                 string versionPath = isRelease ? RELEASE_PATH : TREE_OF_COMMIT_PATH;
-                string version = isRelease ? productVersion : (hash ?? string.Empty);
+                string version = isRelease ? prefix + productVersion : (hash ?? string.Empty);
                 return $"{versionUrlBase}/{(versionPath)}/{version}" ?? string.Empty;
             }
             return string.Empty;
