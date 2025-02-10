@@ -54,7 +54,7 @@ namespace Crypter.Common.Infrastructure
     public static class VersionUrlProvider
     {
         private const string RELEASE_PATH = "releases/tag";
-        private const string COMMIT_PATH = "commit";
+        private const string TREE_OF_COMMIT_PATH = "tree";
 
         public static string GetVersionUrl(bool isRelease, string? hash, string productVersion)
         {
@@ -64,7 +64,7 @@ namespace Crypter.Common.Infrastructure
             
             if (versionUrlBase != null)
             {
-                string versionPath = isRelease ? RELEASE_PATH : COMMIT_PATH;
+                string versionPath = isRelease ? RELEASE_PATH : TREE_OF_COMMIT_PATH;
                 string version = isRelease ? productVersion : (hash ?? string.Empty);
                 return $"{versionUrlBase}/{(versionPath)}/{version}" ?? string.Empty;
             }
